@@ -671,138 +671,8 @@ html,body{height:100%;overflow:hidden;background:#07080d;font-family:var(--font)
 </div>
 </div><!-- /phone -->
 
+<script src="data.js"></script>
 <script>
-// ════════════════════════════════════════════════════════════════════════
-// DATA
-// ════════════════════════════════════════════════════════════════════════
-const WORDS = [
-  // A1-A2
-  {en:"wake up",    ph:"/weɪk ʌp/",    pos:"phr",  tr:"uyanmak",              ex:'I <em>wake up</em> at 7 every morning.',lvl:"A1"},
-  {en:"hungry",     ph:"/ˈhʌŋɡri/",    pos:"adj",  tr:"aç",                   ex:'I\'m <em>hungry</em>. Let\'s eat!',lvl:"A1"},
-  {en:"busy",       ph:"/ˈbɪzi/",      pos:"adj",  tr:"meşgul",               ex:'Sorry, I\'m <em>busy</em> right now.',lvl:"A1"},
-  {en:"always",     ph:"/ˈɔːlweɪz/",   pos:"adv",  tr:"her zaman",            ex:'She <em>always</em> arrives early.',lvl:"A1"},
-  {en:"together",   ph:"/təˈɡeð.ər/",  pos:"adv",  tr:"birlikte",             ex:'Let\'s do it <em>together</em>.',lvl:"A1"},
-  {en:"agree",      ph:"/əˈɡriː/",     pos:"verb", tr:"hemfikir olmak",       ex:'I <em>agree</em> with you completely.',lvl:"A2"},
-  {en:"explain",    ph:"/ɪkˈspleɪn/",  pos:"verb", tr:"açıklamak",            ex:'Can you <em>explain</em> this to me?',lvl:"A2"},
-  {en:"remember",   ph:"/rɪˈmem.bər/", pos:"verb", tr:"hatırlamak",           ex:'Do you <em>remember</em> her name?',lvl:"A2"},
-  {en:"enough",     ph:"/ɪˈnʌf/",      pos:"adj",  tr:"yeterli",              ex:'Is there <em>enough</em> food for everyone?',lvl:"A2"},
-  {en:"perhaps",    ph:"/pəˈhæps/",    pos:"adv",  tr:"belki",                ex:'<em>Perhaps</em> we should try again.',lvl:"A2"},
-  // B1
-  {en:"commute",    ph:"/kəˈmjuːt/",   pos:"verb", tr:"işe gidip gelmek",     ex:'He <em>commutes</em> by subway every day.',lvl:"B1"},
-  {en:"exhausted",  ph:"/ɪɡˈzɔːs.tɪd/",pos:"adj", tr:"bitkin, yorgun",       ex:'I was completely <em>exhausted</em> after work.',lvl:"B1"},
-  {en:"recommend",  ph:"/ˌrek.əˈmend/",pos:"verb", tr:"tavsiye etmek",        ex:'Can you <em>recommend</em> a good book?',lvl:"B1"},
-  {en:"productive", ph:"/prəˈdʌk.tɪv/",pos:"adj", tr:"verimli",              ex:'It was a very <em>productive</em> meeting.',lvl:"B1"},
-  {en:"get along",  ph:"/ɡet əˈlɒŋ/",  pos:"phr",  tr:"iyi geçinmek",        ex:'We <em>get along</em> really well.',lvl:"B1"},
-  {en:"figure out", ph:"/ˈfɪɡ.ər aʊt/",pos:"phr",  tr:"çözmek, anlamak",     ex:'I need to <em>figure out</em> this problem.',lvl:"B1"},
-  {en:"relieved",   ph:"/rɪˈliːvd/",   pos:"adj",  tr:"rahatlamış",           ex:'I was so <em>relieved</em> to hear that.',lvl:"B1"},
-  {en:"genuine",    ph:"/ˈdʒen.ju.ɪn/",pos:"adj",  tr:"samimi, gerçek",      ex:'She is a very <em>genuine</em> person.',lvl:"B1"},
-  // B2
-  {en:"overwhelmed",ph:"/ˌoʊ.vərˈwelmd/",pos:"adj",tr:"bunalmış",            ex:'She felt <em>overwhelmed</em> by everything.',lvl:"B2"},
-  {en:"resilient",  ph:"/rɪˈzɪl.i.ənt/",pos:"adj", tr:"dayanıklı, toparlanabilen",ex:'Children are often more <em>resilient</em>.',lvl:"B2"},
-  {en:"perspective",ph:"/pəˈspek.tɪv/",pos:"noun", tr:"bakış açısı",         ex:'Try to see it from a different <em>perspective</em>.',lvl:"B2"},
-  {en:"sustainable",ph:"/səˈsteɪ.nə.bəl/",pos:"adj",tr:"sürdürülebilir",     ex:'We need more <em>sustainable</em> energy sources.',lvl:"B2"},
-  {en:"advocate",   ph:"/ˈæd.və.kɪt/", pos:"verb", tr:"savunmak, desteklemek",ex:'She <em>advocates</em> for equal rights.',lvl:"B2"},
-  {en:"nuance",     ph:"/ˈnjuː.ɑːns/", pos:"noun", tr:"ince fark, nüans",    ex:'There\'s an important <em>nuance</em> here.',lvl:"B2"},
-  // phrases
-  {en:"Could you say that again?",   ph:"",pos:"phr",tr:"Tekrar söyler misiniz?",     ex:'<em>Could you say that again?</em> I didn\'t quite catch that.',lvl:"A2"},
-  {en:"I'm not sure I follow.",      ph:"",pos:"phr",tr:"Pek anlayamadım.",            ex:'<em>I\'m not sure I follow.</em> Could you explain more?',lvl:"B1"},
-  {en:"That makes sense.",           ph:"",pos:"phr",tr:"Mantıklı, anlıyorum.",        ex:'"It\'s cheaper online." – "<em>That makes sense.</em>"',lvl:"A2"},
-  {en:"It depends on…",             ph:"",pos:"phr",tr:"…bağlı.",                     ex:'<em>It depends on</em> how much time we have.',lvl:"B1"},
-  {en:"To be honest,",              ph:"",pos:"phr",tr:"Açıkçası,",                   ex:'<em>To be honest,</em> I don\'t like this plan.',lvl:"B1"},
-  {en:"I'd rather stay home.",      ph:"",pos:"phr",tr:"Evde kalmayı tercih ederim.", ex:'<em>I\'d rather stay home</em> tonight.',lvl:"B1"},
-  {en:"Fair enough.",               ph:"",pos:"phr",tr:"Haklısın, tamam.",             ex:'"Let\'s leave at 9." – "<em>Fair enough.</em>"',lvl:"B1"},
-  {en:"No worries!",                ph:"",pos:"phr",tr:"Sorun değil!",                 ex:'"Sorry I\'m late." – "<em>No worries!</em>"',lvl:"A2"},
-];
-
-const STORIES = [
-  {
-    id:0, title:"A Morning Coffee", emoji:"☕", lvl:"A1", duration:"3 dk",
-    color:"#1a2010",
-    paragraphs:[
-      {text:`Every morning, <span class="hl" data-w="Sarah">Sarah</span> wakes up at seven o'clock. She goes to the kitchen and makes a cup of <span class="hl" data-w="coffee">coffee</span>. She likes her coffee with a little milk and no sugar. While the coffee is hot, she sits by the window and looks outside. The street is <span class="hl" data-w="quiet">quiet</span> in the morning. Birds sing in the trees. Sarah feels happy and <span class="hl" data-w="relaxed">relaxed</span>. After her coffee, she gets dressed and goes to work.`},
-      {text:`At work, Sarah greets her colleagues. "Good morning!" she says with a smile. Her boss gives her a new <span class="hl" data-w="project">project</span>. It is not very <span class="hl" data-w="difficult">difficult</span>, but it is interesting. Sarah works hard all day. At lunch, she eats a sandwich and drinks orange juice. In the evening, she goes home and cooks dinner. She is tired but happy.`},
-    ],
-    vocab:{Sarah:"kadın ismi (örnek karakter)",coffee:"kahve",quiet:"sessiz",relaxed:"rahat, sakin",project:"proje",difficult:"zor"},
-    questions:[
-      {q:"What time does Sarah wake up?",opts:["Six o'clock","Seven o'clock","Eight o'clock"],ans:1},
-      {q:"How does she like her coffee?",opts:["Black, no milk","With milk and sugar","With milk, no sugar"],ans:2},
-      {q:"How does Sarah feel in the morning?",opts:["Sad and tired","Happy and relaxed","Angry and busy"],ans:1},
-    ]
-  },
-  {
-    id:1, title:"The Lost Key", emoji:"🔑", lvl:"A2", duration:"4 dk",
-    color:"#1a1810",
-    paragraphs:[
-      {text:`Tom couldn't find his keys. He looked everywhere – in his jacket, on the table, under the sofa. Nothing. He started to feel <span class="hl" data-w="anxious">anxious</span> because he had an important meeting at nine o'clock. He checked his phone: 8:45. There were only fifteen minutes left. He called his wife, but she didn't <span class="hl" data-w="answer">answer</span>.`},
-      {text:`Then he had an idea. He tried to <span class="hl" data-w="remember">remember</span> his last steps from yesterday. He came home, put down his bag, and went straight to the kitchen to make tea. He walked to the kitchen and there they were – his keys were right next to the <span class="hl" data-w="kettle">kettle</span>! Tom laughed. He grabbed his keys, ran out the door, and luckily <span class="hl" data-w="arrived">arrived</span> at his meeting with one minute to spare.`},
-    ],
-    vocab:{anxious:"endişeli, gergin",answer:"cevaplamak",remember:"hatırlamak",kettle:"su ısıtıcısı",arrived:"ulaşmak (geçmiş)"},
-    questions:[
-      {q:"What time was Tom's meeting?",opts:["8:45","9:00","9:15"],ans:1},
-      {q:"Where were the keys?",opts:["Under the sofa","In his jacket","Next to the kettle"],ans:2},
-      {q:"How did Tom feel when he couldn't find his keys?",opts:["Relaxed","Anxious","Bored"],ans:1},
-    ]
-  },
-  {
-    id:2, title:"The Job Interview", emoji:"💼", lvl:"B1", duration:"5 dk",
-    color:"#0d1825",
-    paragraphs:[
-      {text:`Maria had been <span class="hl" data-w="preparing">preparing</span> for the interview for two weeks. She had researched the company, practised common questions, and picked out her best outfit the night before. Still, as she sat in the waiting room, she felt her heart <span class="hl" data-w="pounding">pounding</span>. The office was modern and open-plan, with large windows overlooking the city. Other candidates sat nearby, looking equally <span class="hl" data-w="nervous">nervous</span>.`},
-      {text:`When her name was called, Maria took a deep breath and walked into the meeting room. Two interviewers greeted her warmly. The first question was <span class="hl" data-w="straightforward">straightforward</span>: "Tell us about yourself." Maria had practised this many times, and the words came easily. She talked about her experience, her <span class="hl" data-w="skills">skills</span>, and why she was passionate about the role.`},
-      {text:`By the end, she felt the conversation had gone well. She shook hands with both interviewers and thanked them. Outside, she called her friend. "I think it went okay," she said with a <span class="hl" data-w="relieved">relieved</span> laugh. Three days later, she got an email: she had the job.`},
-    ],
-    vocab:{preparing:"hazırlanmak (süreç)",pounding:"hızla atmak",nervous:"gergin",straightforward:"basit, doğrudan",skills:"beceriler",relieved:"rahatlamış"},
-    questions:[
-      {q:"How long had Maria been preparing?",opts:["One week","Two weeks","Three days"],ans:1},
-      {q:"How did she feel in the waiting room?",opts:["Confident","Nervous","Bored"],ans:1},
-      {q:"What was the first interview question?",opts:["Why do you want this job?","Tell us about yourself","What are your weaknesses?"],ans:1},
-      {q:"How did she find out she got the job?",opts:["By phone call","By email","They told her in person"],ans:1},
-    ]
-  },
-  {
-    id:3, title:"A City That Never Sleeps", emoji:"🌆", lvl:"B2", duration:"6 dk",
-    color:"#0d0d1a",
-    paragraphs:[
-      {text:`Urban life has an undeniable energy. At any hour, cities <span class="hl" data-w="pulse">pulse</span> with movement – commuters rushing to work, vendors setting up stalls, street musicians competing with traffic noise. Yet beneath this <span class="hl" data-w="apparent">apparent</span> chaos lies a remarkable degree of order, shaped by <span class="hl" data-w="infrastructure">infrastructure</span> invisible to most residents: water pipes, electrical grids, data networks, and transport systems working in constant <span class="hl" data-w="coordination">coordination</span>.`},
-      {text:`Sociologists argue that city living fundamentally changes how people relate to one another. The <span class="hl" data-w="anonymity">anonymity</span> of urban spaces can feel liberating – no one knows your history, your family, or your failures. But this same quality can breed <span class="hl" data-w="loneliness">loneliness</span>. Studies consistently show that urban dwellers report higher rates of social <span class="hl" data-w="isolation">isolation</span> than their rural counterparts, despite being surrounded by millions of people.`},
-      {text:`The challenge for modern city planners is to design spaces that <span class="hl" data-w="foster">foster</span> connection rather than separation. Parks, community centres, and pedestrianised streets are not luxuries – they are essential elements of a city that wants its residents to <span class="hl" data-w="thrive">thrive</span>. As cities continue to grow, this balance between density and humanity will define the quality of urban life for generations to come.`},
-    ],
-    vocab:{pulse:"atmak, titreşmek",apparent:"görünürde, açık",infrastructure:"altyapı",coordination:"koordinasyon, uyum",anonymity:"anonim olma, kimliksizlik",loneliness:"yalnızlık",isolation:"izolasyon, yalıtım",foster:"geliştirmek, teşvik etmek",thrive:"gelişmek, serpilmek"},
-    questions:[
-      {q:"What does the passage say lies beneath urban chaos?",opts:["More chaos","A remarkable degree of order","Empty streets"],ans:1},
-      {q:"What paradox of city life does the article describe?",opts:["Being surrounded by people yet feeling lonely","Being too busy to work","Having too much infrastructure"],ans:0},
-      {q:"What do sociologists say city living changes?",opts:["Sleep patterns","How people relate to one another","The weather"],ans:1},
-      {q:"According to the text, what is essential for a good city?",opts:["Tall buildings","Parks and community spaces","Large shopping malls"],ans:1},
-    ]
-  },
-];
-
-// Daily exercises pool
-const EX_POOL = {
-  mcq:[
-    {q:"'Exhausted' kelimesinin anlamı nedir?",sub:"",correct:"Bitkin, çok yorgun",opts:["Bitkin, çok yorgun","Heyecanlı","Rahat","Öfkeli"],exp:"'Exhausted' = tamamen bitip tükenmiş. 'I was exhausted after the marathon.'"},
-    {q:"'Get along' ne demek?",sub:"",correct:"İyi geçinmek",opts:["Gitmek","İyi geçinmek","Anlamak","Bırakmak"],exp:"'Get along with someone' = biriyle iyi ilişki kurmak."},
-    {q:"'Perspective' kelimesinin Türkçesi?",sub:"",correct:"Bakış açısı",opts:["Resim","Perspektif lens","Bakış açısı","Uzaklık"],exp:"'Perspective' = bir konuya yaklaşım veya bakış açısı."},
-    {q:"'Resilient' sıfatı hangisi için kullanılır?",sub:"",correct:"Zorluklara rağmen toparlanabilen kişi",opts:["Çok güçlü bir atlet","Zorluklara rağmen toparlanabilen kişi","Çok zeki biri","Sabırsız biri"],exp:"'Resilient' = zorluklardan çabuk iyileşme kapasitesi."},
-    {q:"'To be honest,' ifadesinin Türkçesi?",sub:"",correct:"Açıkçası,",opts:["Dürüstçe söylemek gerekirse","Açıkçası,","Kanımca,","İlginç bir şekilde,"],exp:"'To be honest' = dürüst bir görüş bildirmeden önce kullanılan ifade."},
-    {q:"'Fair enough' ne zaman kullanılır?",sub:"Örnek: 'Let's leave at 9.' – '___'",correct:"Kabul ettiğinde / Haklı bulduğunda",opts:["Kızgın olduğunda","Soru sorarken","Kabul ettiğinde / Haklı bulduğunda","Özür dilerken"],exp:"'Fair enough' = 'makul, tamam, haklısın' anlamında kısa bir onaylama."},
-  ],
-  fill:[
-    {q:"Boşluğu doldurun:",sub:"She felt completely ______ after working 12 hours straight.",answer:"exhausted",hint:"Çok yorgun anlamına gelir.",exp:"'Exhausted' = tamamen bitkin."},
-    {q:"Boşluğu doldurun:",sub:"Can you ______ a good restaurant near here?",answer:"recommend",hint:"Tavsiye etmek.",exp:"'Recommend' = birini veya bir şeyi önermek."},
-    {q:"Boşluğu doldurun:",sub:"I need to ______ this math problem before the exam.",answer:"figure out",hint:"Çözmek, anlamak.",exp:"'Figure out' = bir problemi analiz edip çözmek."},
-    {q:"Boşluğu doldurun:",sub:"To be ______, I don't really like this plan.",answer:"honest",hint:"'To be ___' = açıkçası.",exp:"'To be honest' = dürüst bir şekilde söylemek gerekirse."},
-    {q:"Boşluğu doldurun:",sub:"No ______, it happens to everyone!",answer:"worries",hint:"'Sorun değil!' ifadesi.",exp:"'No worries!' = sorun yok, takma kafana."},
-  ],
-  reorder:[
-    {q:"Cümleyi doğru sıraya koyun:",sub:"",words:["I","usually","commute","by","subway","every","day"],answer:"I usually commute by subway every day",exp:"Zarf (usually) genellikle yardımcı fiilden önce, ana fiilden önce gelir."},
-    {q:"Cümleyi doğru sıraya koyun:",sub:"",words:["She","always","arrives","at","work","on","time"],answer:"She always arrives at work on time",exp:"'Always' yüklemi niteleyen zarftır ve genellikle yüklemden önce gelir."},
-    {q:"Cümleyi doğru sıraya koyun:",sub:"",words:["It","depends","on","how","much","time","we","have"],answer:"It depends on how much time we have",exp:"'It depends on' + isim cümlesi yapısı."},
-    {q:"Cümleyi doğru sıraya koyun:",sub:"",words:["To","be","honest","I","don't","agree","with","you"],answer:"To be honest I don't agree with you",exp:"'To be honest' cümle başında introductory phrase olarak kullanılır."},
-  ],
-};
-
-// ════════════════════════════════════════════════════════════════════════
 // TTS
 // ════════════════════════════════════════════════════════════════════════
 let ttsActiveBtn = null;
@@ -866,6 +736,20 @@ function goHome(){showScreen('s-home');}
       <div class="day-circle ${done?'done':''} ${isToday?'today':''}">${done?'✓':days[d.getDay()]}</div>
       <span>${days[d.getDay()]}</span></div>`;
   }
+  // Today's story card
+  const todayStory = getTodayStory();
+  const storyCard = document.querySelector('.today-card.wide');
+  if(storyCard){
+    storyCard.querySelector('.tc-name').textContent = todayStory.title;
+    storyCard.querySelector('.tc-desc').textContent = `${todayStory.lvl} · ${todayStory.duration} · ${todayStory.questions.length} anlama sorusu`;
+    storyCard.querySelector('.tc-icon').textContent = todayStory.emoji;
+    storyCard.onclick = () => openReader(todayStory.id);
+  }
+  // Day index label
+  const dayIdx = getDayIndex();
+  const dayLabels=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
+  document.getElementById('home-date-txt').textContent =
+    `${dayLabels[dayIdx % 7]} seti · ${today.toLocaleDateString('tr-TR',{day:'numeric',month:'long'})}`;
 })();
 
 // ════════════════════════════════════════════════════════════════════════
@@ -874,7 +758,7 @@ function goHome(){showScreen('s-home');}
 let fcDeck=[],fcIdx=0,fcKnow=0;
 
 function openFlash(){
-  fcDeck=[...WORDS].sort(()=>Math.random()-.5).slice(0,10);
+  fcDeck=getTodayWords(10);
   fcIdx=0;fcKnow=0;
   showScreen('s-flash');
   renderFC();
@@ -924,9 +808,8 @@ function openDaily(){
   renderEx();
 }
 function buildExPool(){
-  const pool=[];
-  EX_POOL[exType].forEach(e=>pool.push({...e,type:exType}));
-  exPool=[...pool].sort(()=>Math.random()-.5);
+  const pool=getTodayExercises(exType, 6);
+  exPool=[...pool];
   exIdx=0;exCorrect=0;exWrong=0;exAnswered=false;
 }
 function buildExTabs(){
@@ -1086,15 +969,18 @@ function nextExercise(){
 // ════════════════════════════════════════════════════════════════════════
 function openStories(){
   showScreen('s-stories');
+  const todayStory = getTodayStory();
   ['easy','mid'].forEach(g=>{
     const el=document.getElementById('story-list-'+g);el.innerHTML='';
     const subset=g==='easy'?STORIES.filter(s=>s.lvl==='A1'||s.lvl==='A2'):STORIES.filter(s=>s.lvl==='B1'||s.lvl==='B2');
     subset.forEach(s=>{
       const d=document.createElement('div');d.className='story-item anim';
+      const isToday = s.id === todayStory.id;
+      if(isToday) d.style.borderColor='var(--teal)';
       d.innerHTML=`
         <div class="story-thumb" style="background:${s.color}">${s.emoji}</div>
         <div class="story-info">
-          <div class="story-title">${s.title}</div>
+          <div class="story-title">${s.title}${isToday?' <span style="font-size:.65rem;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,.3);border-radius:20px;padding:2px 7px;font-weight:700;">BUGÜN</span>':''}</div>
           <div class="story-meta">
             <span class="story-lvl lvl-${s.lvl.toLowerCase()}">${s.lvl}</span>
             <span>${s.duration}</span>
@@ -1238,24 +1124,7 @@ function openWeeklyQuiz(){
 let wqPool=[],wqIdx=0,wqCorrect=0,wqWrong=0,wqAnswered=false;
 
 function startWeeklyQuiz(){
-  // Build 20-question pool: 8 MCQ words + 6 MCQ phrases + 3 story qs + 3 fill
-  const pool=[];
-  // word MCQs
-  const wordPool=[...WORDS].sort(()=>Math.random()-.5).slice(0,8);
-  wordPool.forEach(w=>{
-    const distractors=WORDS.filter(x=>x.tr!==w.tr).sort(()=>Math.random()-.5).slice(0,3).map(x=>x.tr);
-    pool.push({type:'mcq',q:w.en,sub:'"'+w.ex.replace(/<[^>]+>/g,'')+'"',correct:w.tr,opts:[w.tr,...distractors].sort(()=>Math.random()-.5),exp:'Anlam: '+w.tr});
-  });
-  // phrase fill
-  EX_POOL.fill.sort(()=>Math.random()-.5).slice(0,3).forEach(e=>pool.push({...e,type:'fill_wq'}));
-  // story questions
-  STORIES.forEach(s=>s.questions.slice(0,1).forEach(q=>{
-    pool.push({type:'story_mcq',q:q.q,sub:'['+s.title+']',correct:q.opts[q.ans],opts:[...q.opts].sort(()=>Math.random()-.5),exp:'Cevap: '+q.opts[q.ans]});
-  }));
-  // reorder
-  EX_POOL.reorder.sort(()=>Math.random()-.5).slice(0,2).forEach(e=>pool.push({...e,type:'reorder_wq'}));
-  // shuffle and cap at 20
-  wqPool=pool.sort(()=>Math.random()-.5).slice(0,20);
+  wqPool=getWeeklyPool(20);
   wqIdx=0;wqCorrect=0;wqWrong=0;wqAnswered=false;
   document.getElementById('qr-title').textContent='Haftalık Quiz';
   showScreen('s-quiz-run');
